@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>Document</title>
+ </head>
+ <body>
+	<script src="../lib/underscore.js" ></script>
+	<script src="../lib/common.js" ></script>
+	<script>
+		//배열 인덱싱은 내장기능이라 변경불가
+		var letter = ['a','b','c'];
+		console.log(letter[1]);
+
+		function nativeNth(a,index){
+			return a[index];
+		}
+
+		console.log(nativeNth(letter,1));
+
+
+		function isIndexed(data){
+			return _.isArray(data) || _.isString(data);
+		}
+
+		function nth(a, index){
+			if (!_.isNumber(index)) fail("Expected a number as the index");
+			if (!isIndexed(a)) fail("Not supported on non-indexed type");
+			if ((index < 0) || (index > a.length - 1))
+				fail("Index value is out of bounds");
+
+				return a[index];
+		}
+
+		console.log(nth(letter, 1));
+		console.log(nth("abc", 0));
+//		console.log(nth({}, 0));
+//		console.log(nth(letter, 4000));
+//		console.log(nth(letter, "aaa"));
+
+		//nth추상화
+		function second(a){
+			return nth(a,1);
+		}
+
+		console.log(second(['a','e']));
+		console.log(second("fogus"));
+		console.log(second({}));
+
+	</script>
+ </body>
+</html>

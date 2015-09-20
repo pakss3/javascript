@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>Document</title>
+ </head>
+ <body>
+	<script src="../lib/underscore.js" ></script>
+	<script src="../lib/common.js" ></script>
+	<script>
+		/* 값이 존재하는지 안하는지 */
+		//	몰랐던 사실 -> undefined == null, 얕은 비교에서는 존재하지 않음을 가르키는 두 값에 대해 같음으로 표시 
+		function existy(x){
+			return x != null;
+		}
+
+		note(existy(null));			//false
+		note(existy(undefined));	//false
+		note(existy({}.notHere));	//false
+		note(existy(0));			//true
+		note(existy(false));		//true
+
+		
+		// 참 거짓 확인 
+		function truthy(x){
+			return (x !== false) && existy(x); ;
+		}
+		console.log("truthy");
+		note(truthy(false));		//false
+		note(truthy(undefined));	//false
+		note(truthy(0));		//true
+		note(truthy(''));		//true
+
+		function doWhen(cond, action){
+			if(truthy(cond))
+				return action();
+			else
+				return undefined;
+		}
+		
+		// _.result : object[property] 형태로 실행해 줌
+		function executeIfHasField(target, name){
+			return doWhen(existy(target[name]), function(){
+				var result = _.result(target, name);
+				note(["The result is ", result].join(' '));
+				return result;
+			});
+		}
+
+//		console.log(_.result);
+		executeIfHasField([1,2,3],'reverse');		//[3,2,1]
+		executeIfHasField({"foo": 123 },'foo');		//123
+		console.log(executeIfHasField([1,2,3],'nothere'));		//undefined
+
+		note([null, undefined, 1, 2, false].map(existy));		//false,false,true,true,true
+		note([null, undefined, 1, 2, false].map(truthy));		//false,false,true,true,false
+
+	</script>
+ </body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>Document</title>
+ </head>
+ <body>
+	<script src="../lib/underscore.js" ></script>
+	<script src="../lib/common.js" ></script>
+	<script>
+		function lameCSV(str){
+			return _.reduce(str.split("\n"),function(table, row){
+				table.push(_.map(row.split(","), function(c){ return c.trim(); }));
+				return table;
+			},[]);
+		}
+
+		var people = lameCSV("name,age,har\nMerble,35,red\nBob,64,blonde");
+//		console.log(people);
+
+//		console.log(_.rest(people));
+		
+/*
+	_.rest 첫번째 배열만 잘라옴
+	_.map loop를 돌며 배열로 재 정의
+	_.zip a= [a,b,c], b= [1,2,3] 이 있으면 _.zip(a,b) => [a,1,b,2,c,3] 형태로 merge 
+*/
+		function selectNames(table){
+			return _.rest(_.map(table, _.first));
+		}
+
+		function selectAges(table){
+			return _.rest(_.map(table, second));		//기 선언한 함수 참조
+		}
+
+		function selectHairColor(table){
+			return _.rest(_.map(table, function(row){
+				return nth(row, 2);
+			}));		//기 선언한 함수 참조
+		}
+		
+		var mergeResults = _.zip;
+
+		note( selectNames(people));
+		note( selectAges(people));
+		note( selectHairColor(people));
+		note( mergeResults( selectNames(people), selectAges(people)));
+
+
+	</script>
+ </body>
+</html>

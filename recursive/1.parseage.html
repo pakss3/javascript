@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+ <head>
+
+  <title>Document</title>
+ </head>
+ <body>
+	<script src="../lib/underscore.js" ></script>
+	<script>
+		function parseAge(age){
+			if(!_.isString(age)) throw Error("excepting a string");
+			var a;
+			
+			console.log("Attempting to parse an age");
+
+			a = parseInt(age, 10);
+
+			if(_.isNaN(a)){
+				console.log(["Could not parse age : ",age].join(' '));
+				a = 0 ;
+			}
+			return a;
+
+		}
+
+		console.log(parseAge("42"));
+//		console.log(parseAge(42));
+		console.log(parseAge("frob"));
+
+		function fail(thing){
+			throw new Error(thing);
+		}
+
+		function warn(thing){
+			console.log(["WARNING:", thing].join(' '));
+		}
+
+		function note(thing){
+			console.log(["NOTE", thing].join(' '));
+		}
+
+		function parseAge1(age){
+			if(!_.isString(age)) fail("excepting a string");
+			var a;
+			
+			note("Attempting to parse an age");
+
+			a = parseInt(age, 10);
+
+			if(_.isNaN(a)){
+				warn(["Could not parse age : ",age].join(' '));
+				a = 0 ;
+			}
+			return a;
+
+		}
+
+		console.log(parseAge1("43"));
+//		console.log(parseAge1(42));
+		console.log(parseAge1("frob1"));
+
+	</script>
+
+ </body>
+</html>
