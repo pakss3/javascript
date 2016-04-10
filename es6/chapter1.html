@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+ </head>
+ <body>
+<script>
+(function(){
+
+	console.log("============================fn======================================");
+	const a = {
+		'name' : '민호'
+	};
+	console.log(a.name);
+	console.log(a.name = '수지');
+	//a = {};		//index.html:32 Uncaught TypeError: Assignment to constant variable.
+
+
+	function myFn(x=1,y=2){
+		console.log(x,y);
+	}
+
+	myFn(3,4);
+	myFn();
+
+
+	function myFn1(x=1,y=2,z=1+2,k=x+y){	//argument 기본값 할당 
+		console.log(x,y,z,k);
+	}
+
+	myFn1(2);
+
+}());
+</script>
+
+
+
+	<script>
+(function(){
+	console.log("============================펼친연산자======================================");
+//펼침연산자
+// list형태의 ,,,를 배열로 맵핑
+	function myFunction(a,b)
+	{
+		return a+b;
+	}
+
+	let data = [1,4];
+	let result = myFunction(...data);
+	console.log(result);
+
+
+	let array1 = [2,3,4];
+	let array2 = [1, ...array1, 5, 6, 7];
+	console.log(array2);
+
+	let array3 = [2,3,4];
+	let array4 = [1];
+	array3.push(...array4);
+	console.log(array3);
+	
+
+	let a1 = [1];
+	let a2 = [2];
+	let a3 = [...a1,...a2,...[3,4]];
+	let a4 = [5];
+
+	console.log(a3);
+	console.log(function(a,b,c,d,e){		//여러펼침
+		return a+b+c+d+e;
+	}(...a3,...a4));
+
+	console.log(
+		function(a,b, ...args){ 
+			return (args); 
+		}(1,2,3,4,5)
+	);
+}());
+</script>
+<script>
+(function(){
+	console.log("============================해체 할당======================================");
+	console.log("============================배열해체 할당======================================");
+	
+	let array1 = [1,2,3];
+	
+	let [a,b,c] = array1;		//좌변에 iterable이 아닌 객체가 오면 에러 
+	console.log(a,b,c);	
+
+	let [d,e,f] = [1,,3];
+	console.log(d,e,f);
+
+	let [g, ...h]= [1,2,3,4,5,6];
+	console.log(
+		g,
+		Array.isArray(h),
+		h
+	);
+
+	let [k,,,...l] = [1,2,3,4,5,6];	//펼침연산, 건너뛰기
+	console.log(k,l);
+
+	let [m,n = 3] = [1];		//기본값
+	console.log(n);
+
+	let [o,p,[q,r]] = [1,2,[3,4]];
+	console.log(o,p,q,r);
+
+	(function([a,b,c = 3]){
+		console.log(a,b,c);
+	})([1,2]);
+
+	(function([a,b,c = 3] = [3,4,5]){
+		console.log(a,b,c);
+	})();
+}());
+</script>
+ <script>
+ (function(){
+	console.log("============================객체해체 할당======================================");
+	
+	let object = {'name' : '민호', 'age' : 23 };
+	let name, age; 
+	({name1, name, age} = object);		//property와 변수명은 반드시 같아야된다, value가 binding 됨 ,괄호() 로 감싸야됨
+	console.log(name1,name,age);
+	
+//	let x, y;
+//	 ({name : x, age:y} = object);
+	 let {name: x, age: y } = object;
+	 console.log(x);
+
+	let {a,b,c = 3} = {a:1,b:2};
+	console.log(c);
+
+	let {["first"+"Name"]: z} = {firstName : "수지"};
+	console.log(z);
+
+	let {n, other : {ag}} = {n : '수지', other : {ag:23}};
+	console.log(n,age);
+	
+	(function({name='수지',age =23, profession ='연예인'} = {}){
+		console.log(name, age,profession);
+	}({name :'민호', age : 23}));
+
+ }());
+</script>
+ <script>
+ (function(){
+	console.log("============================화살표 함수======================================");
+	let circleArea = (pi, r) => {
+		let area = pi * r * r;
+		return area;
+	};
+
+	let result = circleArea(3.14, 3);
+
+	console.log(result);	
+
+	let circleAreaLittle = (pi, r) => pi * r * r;
+	let resultLittle = circleAreaLittle(3.14, 3);
+	console.log(resultLittle);
+
+
+ 
+  }());
+  // scope : 어떤 함수를 호출할때마다 변수를 접근 할 수 있는 범위
+  // context : 실행중인 코드를 소유한 객체의 참조값 즉 this를 말함
+  //arrow는 new를 쓸 수 없음, Function 생성자의 인스턴스
+
+	/*
+	var obj = {
+		f1 :function(){
+			console.log(this);
+			var f2 = function(){ console.log(this); };
+			f2();
+			setTimeout(f2,1000);
+		}		
+	};
+	obj.f1();	//object, window, window
+	*/
+	/*
+	let obj1 = {
+		f1:() =>{
+			console.log(this);
+			let f2 = () =>{ console.log(this); };
+			f2();
+			setTimeout(f2,1000);
+		}
+	};
+	obj1.f1();		//window, window, window
+	*/
+	let x = 1, y = 2, object = {x,y};
+	console.dir(object.x);
+
+	let o = {
+		fn(){
+			console.log('hello');
+		}
+	};
+	o.fn();
+
+
+
+</script>
+ 
+ 
+ </body>
+</html>
+

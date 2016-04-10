@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+ </head>
+ <body>
+<script>
+(function(){
+	let binary = 0b00001111; //10진수를 15의 2진수, 0b를 붙이면 2진수 인식;
+	console.log(binary === 15);
+	
+//	let otcal = 017;	//es5에선 앞에 0붙이면 8진수
+	let otcal = 0o17;	//es6에선 앞에 0o붙이면 8진수
+	console.log(otcal === 15);
+
+	//js는 64비트 부동소수점, 정수란 소수점이 0인 부동소수점임, 정수 파악은 isInteger로 확인 
+	let a = 17.0;
+	let b = 1.2;
+
+	console.log("Number.isInteger_a:"+Number.isInteger(a));
+	console.log("Number.isInteger_b:"+Number.isInteger(b));
+
+	let c = ['NaN',NaN,'안녕하세요',12];
+	let NaNtest = (fn,...c) => {
+		for(let value of c){ 
+			console.log(fn(value));
+		}
+	};
+
+	console.log("Number.isNaN");		//정확히 NaN일때만 비교
+	NaNtest(Number.isNaN,...c);
+	console.log("isNaN");				//숫자가 아닌것 체크 
+	NaNtest(isNaN,...c);
+
+
+	console.log(NaN == NaN, NaN === NaN);
+
+	console.log(0.1 + 0.2);	//컴퓨터가 계산하기 힘든 부동소수점으로 보여줌 
+	console.log(0.9-0.8);	//컴퓨터가 계산하기 힘든 부동소수점으로 보여줌 
+	
+	let eplilonEqual = (a,b) => Math.abs(a-b) < Number.EPSILON;	//두 값의 동등여부 확인
+	console.log(eplilonEqual(0.1+0.2,0.3));
+}());
+</script>
+ 
+ 
+ </body>
+</html>
+
