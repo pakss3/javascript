@@ -1,0 +1,108 @@
+/**
+ * Created by pakss3 on 2016-05-08.
+ */
+<script>
+/*
+
+var a = 12;
+ function myFunction(){
+  console.log(a);
+ var b = 13;
+  if(true){
+   var c = 14;
+   console.log(b);
+  }
+  console.log(c);
+
+ }
+
+ myFunction();
+*/
+/*
+let a = 12;
+ function myFunction() {
+  console.log(a);
+  let b = 13;
+
+  if(true){
+   let c = 14;
+   console.log(b);
+  }
+  /!*console.log(c);*!/
+ }
+myFunction();
+
+const pi = 3.141;
+
+/!*pi = 3; *!/ //할당에러
+
+const b = {
+ "name" : "민호",
+};
+
+ console.log(b.name);
+ b.name = '수지';
+ console.log(b.name);
+
+ // const 는 불변이지만 , 객체 자체는 가변상태
+
+ function myFunction1(x = 1, y = 1, z = 2){
+   console.log(x,y,z);
+ }
+myFunction1(6,7);
+
+
+ function myFn1(a, b){
+  return a+b;
+ }
+let data = [1,5];
+ console.log(myFn1(...data));
+ let data1 = [1,...data,3,4,5];
+ console.log(data1);
+
+ data.push(...data1);
+ console.log(data);
+
+
+ function myFn2(a, b, ...aa){
+  console.log(aa);
+}
+ console.log(myFn2(1,2,3,4,5));*/
+/*
+ let [a1,b1,c1] = [1,2,3];
+ console.log(b1);*/
+ /*let [a,,b] = [1,2,3];
+ console.log(a);
+
+ let [c,d,,...e] = [1,2,3,4,5,6,7];
+ console.log(e);*/
+/* let [a,b,c = 2]  = [1,2];
+ console.log(c);*/
+ /*let [d,e,[f,g]] = [1,2,[2]];
+ console.log(f);*/
+
+/*function myFunction([a,b,c = 2] = [1,2]){
+ console.log(a,b,c);
+}
+ myFunction();
+ */
+let x,y;
+ let o = {"name" : 22, 'age':33 };
+ let name, age ;
+({name : x, age : y} = o);
+ console.log(name,age);
+console.log(x,y);
+
+ let {n:k, a:m} = {n:'33',a:'55'};
+ console.log(k,m);
+
+ let{['first'+'name' ] : su} = {firstname : 'su'}
+console.log(su);
+
+
+ function ex({name= 'su1',age = 23, pro = 'y'}= {}){
+  console.log(name,age,pro);
+ }
+ ex({name:'min'});
+
+</script>
