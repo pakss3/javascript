@@ -1,108 +1,231 @@
-/**
- * Created by pakss3 on 2016-05-08.
- */
-<script>
-/*
+<!doctype html>
+<html lang="ko">
+<head>
+ <meta charset="UTF-8">
+ <meta name="Generator" content="EditPlus®">
+ <meta name="Author" content="">
+ <meta name="Keywords" content="">
+ <meta name="Description" content="">
+ <title>Document</title>
+</head>
+<body>
 
-var a = 12;
- function myFunction(){
+<script>
+ /*
+
+  var a = 12;
+  function myFunction(){
   console.log(a);
- var b = 13;
+  var b = 13;
   if(true){
-   var c = 14;
-   console.log(b);
+  var c = 14;
+  console.log(b);
   }
   console.log(c);
 
- }
+  }
 
- myFunction();
-*/
-/*
-let a = 12;
- function myFunction() {
+  myFunction();
+  */
+ /*
+  let a = 12;
+  function myFunction() {
   console.log(a);
   let b = 13;
 
   if(true){
-   let c = 14;
-   console.log(b);
+  let c = 14;
+  console.log(b);
   }
   /!*console.log(c);*!/
- }
-myFunction();
+  }
+  myFunction();
 
-const pi = 3.141;
+  const pi = 3.141;
 
-/!*pi = 3; *!/ //할당에러
+  /!*pi = 3; *!/ //할당에러
 
-const b = {
- "name" : "민호",
-};
+  const b = {
+  "name" : "민호",
+  };
 
- console.log(b.name);
- b.name = '수지';
- console.log(b.name);
+  console.log(b.name);
+  b.name = '수지';
+  console.log(b.name);
 
- // const 는 불변이지만 , 객체 자체는 가변상태
+  // const 는 불변이지만 , 객체 자체는 가변상태
 
- function myFunction1(x = 1, y = 1, z = 2){
-   console.log(x,y,z);
- }
-myFunction1(6,7);
+  function myFunction1(x = 1, y = 1, z = 2){
+  console.log(x,y,z);
+  }
+  myFunction1(6,7);
 
 
- function myFn1(a, b){
+  function myFn1(a, b){
   return a+b;
- }
-let data = [1,5];
- console.log(myFn1(...data));
- let data1 = [1,...data,3,4,5];
- console.log(data1);
+  }
+  let data = [1,5];
+  console.log(myFn1(...data));
+  let data1 = [1,...data,3,4,5];
+  console.log(data1);
 
- data.push(...data1);
- console.log(data);
+  data.push(...data1);
+  console.log(data);
 
 
- function myFn2(a, b, ...aa){
+  function myFn2(a, b, ...aa){
   console.log(aa);
-}
- console.log(myFn2(1,2,3,4,5));*/
-/*
- let [a1,b1,c1] = [1,2,3];
- console.log(b1);*/
+  }
+  console.log(myFn2(1,2,3,4,5));*/
+ /*
+  let [a1,b1,c1] = [1,2,3];
+  console.log(b1);*/
  /*let [a,,b] = [1,2,3];
- console.log(a);
+  console.log(a);
 
- let [c,d,,...e] = [1,2,3,4,5,6,7];
- console.log(e);*/
-/* let [a,b,c = 2]  = [1,2];
- console.log(c);*/
+  let [c,d,,...e] = [1,2,3,4,5,6,7];
+  console.log(e);*/
+ /* let [a,b,c = 2]  = [1,2];
+  console.log(c);*/
  /*let [d,e,[f,g]] = [1,2,[2]];
- console.log(f);*/
+  console.log(f);*/
 
-/*function myFunction([a,b,c = 2] = [1,2]){
- console.log(a,b,c);
-}
- myFunction();
- */
-let x,y;
- let o = {"name" : 22, 'age':33 };
- let name, age ;
-({name : x, age : y} = o);
- console.log(name,age);
-console.log(x,y);
+ /*function myFunction([a,b,c = 2] = [1,2]){
+  console.log(a,b,c);
+  }
+  myFunction();
+  */
+ /*let x,y;
+  let o = {"name" : 22, 'age':33 };
+  let name, age ;
+  ({name : x, age : y} = o);
+  console.log(name,age);
+  console.log(x,y);
 
- let {n:k, a:m} = {n:'33',a:'55'};
- console.log(k,m);
+  let {n:k, a:m} = {n:'33',a:'55'};
+  console.log(k,m);
 
- let{['first'+'name' ] : su} = {firstname : 'su'}
-console.log(su);
+  let{['first'+'name' ] : su} = {firstname : 'su'}
+  console.log(su);
 
 
- function ex({name= 'su1',age = 23, pro = 'y'}= {}){
+  function ex({name= 'su1',age = 23, pro = 'y'}= {}){
   console.log(name,age,pro);
- }
- ex({name:'min'});
+  }
+  ex({name:'min'});*/
+
+ /*
+  // 태그드 템플릿 함수
+  let tag = function(strings, ...values)
+  {
+  let result = "";
+  console.log(strings.raw[0]);  // 판별식이 나오기전 까지 추출
+  for(let i = 0; i < strings.length; i++)
+  {
+  result += strings[i];
+
+  if(i < values.length)
+  {
+  result += values[i];
+  }
+  }
+
+  return result;
+  };
+
+  let a = 20;
+  let b = 10;
+  let c = "java";
+
+  let str = tag `dddd ${1+b},aaa ${c}`;
+
+  console.log(str);*/
+
+ /*let str = '0123';
+ let obj = {number : 1};
+ let arr = Array.from(str,
+         function(v){ return parseInt(v)+ this.number },
+         obj);
+ console.log(arr.join(' '));
+
+ let arr1 = new Array(2);
+ let arr2 = Array.of(3);
+ console.log(arr1[0], arr1.length);
+ console.log(arr2[0], arr2.length);
+ console.log('한글');
+ */
+/*
+ let set1 = new Set(); //유일한 값을 담는 콜렉션
+ let set2 = new Set('안녕하세요');
+
+ let set = new Set('안녕하세요!!!');
+ set.add(12);
+
+ console.log(set.has('!')); //값 존재 확인
+ console.log(set.size);
+
+ set.delete(12);
+
+ console.log(...set);
+ set.clear();*/
+
+ /*let map = new Map();
+ let o = { n : 1};
+ map.set(o,'A');
+ map.set('2',9);
+
+ console.log(map.has('2'));
+ console.log(map.get(o));
+ console.log(...map);
+
+ map.delete('2');
+ console.log(...map);
+ map.clear();
+
+
+ let map_1 = new Map([[1,2],[4,5]]);
+ console.log(map_1.size);
+
+  ' __proto__ 사용 가능
+ let a = {a : 12, __proto__: {b:13}};
+ console.log(a.a);
+ console.log(a.b);
+ */
+/*
+ console.log(Object.is(0, -0));
+ console.log(0 === -0);
+ console.log(Object.is(NaN, 0/0));
+ console.log(NaN === 0/0);
+ console.log(Object.is(NaN, NaN));
+ console.log(NaN === NaN);*/
+/*
+ let x = {x : 12};
+ let y = {y:13,__proto__:x};
+ let z = {z:14, get b(){ return 2;}, q:{}};
+
+ Object.defineProperty(z, 'z', {enumerable:false});
+
+ let m = {};
+
+ Object.assign(m,y,z);
+
+ console.log(m.y);
+ console.log(m.z);
+ console.log(m.b);
+ console.log(m.x);
+ console.log(m.q == z.q);
+ */
+
+
+ console.log(Symbol('내심볼') === Symbol('내심볼'));
+ console.log(typeof Symbol('내심볼') ); //유일한 심볼 확인방법
+
+
+ // ES6부터 모든 우너시타입 생성자를 임의로 호출 할 수 없다.
+ // Symbol 자체는 생성자 함수로 사용 할 수 없지만. 엔진에서는 객체의 심볼을 감싸기 위해 Symbol 함수를 생성자로 사용
 
 </script>
+
+dd
+</body>
+</html>
