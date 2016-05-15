@@ -216,6 +216,7 @@
  console.log(m.q == z.q);
  */
 
+/*
 
  console.log(Symbol('내심볼') === Symbol('내심볼'));
  console.log(typeof Symbol('내심볼') ); //유일한 심볼 확인방법
@@ -223,6 +224,356 @@
 
  // ES6부터 모든 우너시타입 생성자를 임의로 호출 할 수 없다.
  // Symbol 자체는 생성자 함수로 사용 할 수 없지만. 엔진에서는 객체의 심볼을 감싸기 위해 Symbol 함수를 생성자로 사용
+*/
+
+/*
+ let obj = {};
+
+ (function(){
+  let s1 = Symbol('name');
+  obj[s1] = '수지';
+  console.log(obj[s1]);
+ })();
+
+
+ (function(){
+  let s2 = Symbol.for('age');// 전역객체를 생성함
+  obj[s2] = 27;
+  console.log(obj[s2]);
+ })();
+
+ console.log(obj[Symbol.for('age')]);*/
+/*
+// 이터레이션 규약
+// 인터페이스 구현규칙
+ let obj = {
+  array : [1,2,3,4,5]
+  ,nextIndex : 0
+  ,next : function(){
+    return this.nextIndex < this.array.length ?
+       {
+         value : this.array[this.nextIndex++]
+        , done:false
+       } :
+       {
+         done:true
+       }
+  }
+ };
+
+ console.log(obj.next().value);
+ console.log(obj.next().value);
+ console.log(obj.next().value);
+ console.log(obj.next().value);
+ console.log(obj.next().value);
+ console.log(obj.next().done);*/
+
+/*
+
+    function ajax(){
+        return new Promise(function(resolve, reject){
+            var request = new XMLHttpRequest();
+            var url = "data.json";
+            request.open('GET',url);
+            request.addEventListener("load",function(){
+               if(request.status === 200){
+                   resolve(request.responseText);
+               } else{
+                   reject("서버에러 : "+request.status);
+               }
+
+            }, false);
+            request.addEventListener("error",function(){
+                reject('ajax 요청실패');
+
+            },false);
+
+            request.send();
+        });
+
+    }
+
+ function verify(value){
+    return new Promise(function(resolve, reject){
+        if(value == true){
+            console.log("성공적인 저장");
+        }else{
+            console.log('실패');
+            reject("왜 실패햇을까??");
+        }
+    })
+ }
+
+
+    ajax().then(function(value){
+        value = JSON.parse(value);
+        return value;
+    }).then(function(value){
+        console.log(value.Name);
+        return value;
+    }).then(function(value){
+        var result = confirm('데이터는 정확한가요?');
+        return result;
+    })
+    .then(verify)
+    .then(null,function(reason){
+        console.log(reason);
+    }).catch(function(reason){
+        console.log('reason');
+    });
+*/
+
+/*var p1 = Promise.resolve(4);
+    p1.then(function(value){
+        console.log(value);
+    });*/
+
+/*let p2 = Promise.reject(5);
+    p2
+    .catch(function(reason){
+        console.log(reason);
+    });*/
+
+/*
+    var p1 = new Promise(function(resolve, reject){
+        setTimeout(function(){
+            resolve();
+        },3000);
+
+    });
+    var p2 = new Promise(function(resolve, reject){
+        setTimeout(function(){
+            resolve(2000);
+        },2000);
+    });
+
+    var arr= [p1,p2];
+
+ var p3 = new Promise(function(resolve, reject){
+        setTimeout(function () {
+            reject("1000");
+        },1000)
+ });
+    arr.push(p3);
+ Promise.all(arr).then(function(value){
+     console.log(value+"done");
+ }, function(value){
+     console.log(value+"done?");
+ });*/
+/*
+    navigator.getBattery().then(function(value){
+        console.log('배터리상태:'+value.level*100);
+
+    },
+    function(reason){
+        console.log('에러 : '+reason);
+    });*/
+
+    /*function function_name(a,b,c){
+    console.log('run?');
+        return this.value+ a+b+c;
+    }
+    var returned_value = Reflect.apply(function_name, {value:100}, [10,20,30]);
+    console.log(returned_value);
+*//*
+ function constructor1(a,b){
+     this.a = a;
+     this.b = b;
+     this.f = function(){
+         return this.a +this.b+this.c;
+     };
+ }
+
+ function construcor2(){}
+ construcor2.prototype.c = 100;
+
+ var myObject = Reflect.construct(constructor1, [1,2], construcor2);
+
+    console.log(myObject.f());
+
+    var obj = {};
+    Reflect.defineProperty(obj, 'name', {
+        value:'수지',
+        writable : true,
+        configurable: true,
+        enumerable:true
+    });
+
+    console.log(obj.name);*/
+/* navigator.getBattery().then(function(value){
+             console.log('배터리상태:'+value.level*100);
+
+         },
+         function(reason){
+             console.log('에러 : '+reason);
+         });*/
+/*
+    var obj = {
+        __name__ : '수지'
+    };*/
+   /* Reflect.defineProperty(obj,"name",{
+        get : function(){
+            return this.__name__;
+        },
+        set:function(newName){
+            this.__name__ = newName;
+        },
+        configurable : true,
+        /!*writable : false,*!/
+        enumerable:true
+    })
+    obj.name = '민호';
+    console.log(obj.name);
+
+    var obj =  {a:1,b:2,c:3};
+    var iterator = Reflect.enumerate(obj);
+ console.log(iterator.next().value);
+ console.log(iterator.next().done);
+ console.log(iterator.next().value);
+ console.log(iterator.next().done);
+ console.log(iterator.next().value);
+ console.log(iterator.next().done);*/
+
+/*
+
+var descriptor = Reflect.getOwnPropertyDescriptor(obj, '__name__');
+
+    console.log(descriptor.value);
+    console.log(descriptor.writable);
+    console.log(descriptor.enumerable);
+    console.log(descriptor.configurable);
+
+    Object.defineProperties(obj, {
+        __proto__ : {
+            name1 : '수우우지'
+        }
+    });
+ var obj3 ={
+     __proto__ : {
+         name1 : '수우우지'
+     }
+ };
+var obj2 = Reflect.getPrototypeOf(obj3);
+    console.log(obj2.name1);
+
+console.log(Reflect.isExtensible(obj));
+Object.preventExtensions(obj);
+console.log(Reflect.isExtensible(obj));
+*/
+/*
+    var target = {
+        age : 12
+    };
+    var handler = {};
+
+    var proxy = new Proxy(target, handler);
+    proxy.name = '수지';
+    console.log(target.name);
+    console.log(proxy.name);
+    console.log(target.age);
+    console.log(targe.age);*/
+
+
+ /*   var proxy = new Proxy(
+        {age:12},
+        {
+            get : function(target, property, recevier){
+                if(property in target) return target[property];
+                else return "찾지못함";
+            }
+        }
+    );
+    console.log(Reflect.get(proxy, 'age'));
+    console.log(Reflect.get(proxy, 'name'));
+*/
+/*
+ var proxy = new Proxy(
+         {age:13},
+         {
+             get : function(target, property, recevier){
+                 console.log(recevier);
+                 if(property in target){
+                     console.log(recevier);
+                     return target[property];
+                 }else{
+                     return "찾지못함"
+                 };
+             }
+         }
+ );
+var temp = proxy.name;
+ var obj = {age : 12 , __proto__ :proxy};
+    temp = obj.name;*/
+
+    /*var proxy = new Proxy({},{
+        set : function(target, property, value, receiver){
+            target[property] = value+"1";
+            return true;
+        }
+    });
+
+    Reflect.set(proxy, "name",'수지');
+    console.log(proxy.name);
+
+*//*
+    var proxy = new Proxy({age : 12, name:"수지1" , __proto__ : {name : '수지'}},{
+        getPrototypeOf:function(target){
+            return Object.getPrototypeOf(target);
+        }
+    });
+
+    console.log(Reflect.getPrototypeOf(proxy).name);
+*/
+/*
+    var proxy = new Proxy({age : 12, name:'수지'},{
+        enumerate : function(target){
+            var arr = [];
+            for( var p in target){
+                arr[arr.length] = p;
+            }
+            return arr[Symbol.iterator]();
+        }
+    });
+    var iterator = Reflect.enumerate(proxy);
+    console.log(iterator.next().value)*/
+/*
+var object ={age : 12, __proto__ : {name:'수지'}, [Symbol()] : "Symbol"};
+ Object.defineProperty(object, "profession",{
+     enumerable:false,
+     configurable : false,
+     writable : false,
+     value :'연예인'
+ });
+
+ var proxy = new Proxy(object,{
+     ownKeys : function(target){
+         return Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target));
+     }
+ });
+    console.log(Reflect.ownKeys(proxy));
+    console.log(Object.getOwnPropertyNames(proxy));
+ console.log(Object.keys(proxy));
+ console.log(Object.getOwnPropertySymbols(proxy));
+*/
+
+    var revocableProxy = Proxy.revocable({age:12},{
+
+     get : function(target, property, recevier){
+         if(property in target) return target[property];
+         else return "찾지못함";
+     }
+
+    });
+
+    console.log(revocableProxy.proxy.age);
+    revocableProxy.revoke();
+ console.log(revocableProxy.proxy.age);
+
+
+
+
+
+
 
 </script>
 
