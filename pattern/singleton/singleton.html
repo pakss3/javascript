@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>singleton</title>
+</head>
+<body>
+- 전역 접근점 제공
+- 시스템 래퍼에 번거롭게 인수를 주고 받지도 않고 어디서나 접근 가능
+- 인스턴스를 여러개 만들지 않아 상태가 엉망이 되지 않음
+- 한번도 사용 하지 않는다면 인스턴스를 아얘 생성하지 않음
+- 런타임에 초기화 됨 (게으른 초기화)
+<script>
+    const PLATFORM = 'WII';
+    class FileSystem{
+        constructor(){
+
+        }
+
+        readFile(path){
+
+        }
+
+        writeFile(path){
+
+        }
+
+        static instance(){
+            if(!(this.instance_ instanceof FileSystem)){
+                if(PLATFORM == 'WII'){
+                    this.instance_ = new WiiFileSystem;
+                }else{
+                    this.instance_ = new PS3FileSystem;
+                }
+            }
+            return this.instance_;
+        }
+    }
+
+    class PS3FileSystem extends FileSystem{
+        readFile(path){
+            console.log('ps3 readfile');
+        }
+
+        writeFile(path){
+            console.log('ps3 writeFile');
+        }
+    }
+
+    class WiiFileSystem extends FileSystem{
+        readFile(path){
+            console.log('wii readfile');
+        }
+
+        writeFile(path){
+            console.log('wii writeFile');
+        }
+    }
+
+    FileSystem.instance().readFile()
+
+
+</script>
+
+
+</body>
+</html>

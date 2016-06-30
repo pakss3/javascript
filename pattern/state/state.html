@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상태</title>
+</head>
+<body>
+
+- 유한상태기계(finite state machine), 계층형 상태 기계(hierarchical state machine), 푸쉬다운 오토마타(pushdown automata)<br/>
+<br/>
+- 상태기계 플로차트<br/>
+[서기] ->(누르기↓)-> [엎드리기]<br/>
+[엎드리기]->(놓기↓)->[서기]<br/>
+[서기]->(누르기 B)->[점프]->(누르기↓)->[내려찍기]<br/>
+<br/>
+* 오토마타 이론(유한상태기계)<br/>
+    - 가질수 있는 '상태'가 한정된다.<br/>
+    - 한번에 '한가지' 상태만 될 수 있다.<br/>
+    - '입력'이나 '이벤트'가 기계에 전달된다.<br/>
+    - 각 상태에는 입력에 따라 다음 상태로 '전이(transition)'가 있다.<br/>
+    - 입력, 상태, 전이 3가지 형식이 전부임<br/>
+<br/>
+<br/>
+> 열거형 상태로 변경(case 문으로 이벤트 및 전이처리)<br/>
+> 현재상태의 객체 포인터 추가 후, 거대한 다중 선택문을 제거하고 대신 상태 객체 위임<br/>
+> 동작을 위임하는 객체를 변경함으로써 주요 클래스의 동작을 변경하는게 목표<br/>
+<br/>
+- 데메테르 원칙<br/>
+
+<script>
+    const PRESS_B = 66;
+    const PRESS_DOWN = 40;
+
+    const STATE_STANDING = "STATE_STANDING";
+    const STATE_JUMPING = "STATE_JUMPING";
+    const STATE_DUCKING = "STATE_DUCKING";
+    const MAX_CHARGE = 3;
+
+/*
+    class HeroInput{
+
+        constructor(input){
+
+            if(input == PRESS_B){
+                document.body.innerHTML += "<br>"+PRESS_B+"<br>";
+            }else if(input == PRESS_DOWN){
+                document.body.innerHTML += "<br>"+PRESS_DOWN+"<br>";
+            }
+        }
+    }
+*/
+/*
+    class HeroInput{
+
+        constructor(input){
+            this.state_ = STATE_STANDING;
+            switch(this.state_){
+                case STATE_STANDING :
+                    if(input == PRESS_B){
+                        this.state_ = STATE_JUMPING;
+                        document.body.innerHTML += "<br>"+PRESS_B+"<br>";
+                    }else if(input == PRESS_DOWN){
+                        this.state_ = STATE_DUCKING;
+                        this.chargeTime_ = 0;
+                        document.body.innerHTML += "<br>"+PRESS_DOWN+"<br>";
+                    }
+                    break;
+                case STATE_JUMPING :
+                    if(input == PRESS_DOWN){
+                        this.state_ = STATE_DUCKING;
+                        document.body.innerHTML += "<br>"+PRESS_DOWN+"<br>";
+                    }
+                    break;
+                case STATE_DUCKING :
+                    if(input == PRESS_B){
+                        this.state_ = STATE_JUMPING;
+                        document.body.innerHTML += "<br>"+PRESS_B+"<br>";
+                    }
+                    break;
+            }
+
+        }
+
+        static update(){
+            console.log("ddd");
+            if(this.state_ == PRESS_DOWN){
+                this.chargeTime_ += 1;
+
+                if(this.chargeTime_ > MAX_CHARGE){
+                    console.log('그만해');
+                }
+            }
+        }
+    }
+*/
+    class HeroState {
+        constructor() {
+
+        }
+        handleInput(hero, input){}
+        update(hero){}
+
+        static ducking(){
+            return new DuckingState();
+        }
+
+    }
+
+    class DuckingState extends HeroState{
+        constructor() {
+            super();
+            this.chargeTime = 0;
+        }
+
+        handleInput(hero, input){
+            if(input == PRESS_B){
+                hero.say('PRESS_B');
+            }
+        }
+
+        update(hero){
+            this.chargeTime_ += 1;
+            if(this.chargeTime_ > MAX_CHARGE){
+                console.log('그만해');
+            }
+        }
+
+    }
+
+    class Hero{
+        handleInput(input){
+            this.state_.handleInput(this, input);
+        }
+
+        update(){
+            this.state_.update(this);
+        }
+
+
+    }
+
+
+
+     window.onkeydown = function(e){
+        let hero = new Hero();
+         hero.handleInput(e.keyCode);
+
+
+    }
+
+
+    window.onload = function(){
+
+  /*      setInterval(function(){
+            HeroInput.update()
+        },1000);
+  */  }
+
+
+
+</script>
+
+
+</body>
+</html>

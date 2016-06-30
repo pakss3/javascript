@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+ </head>
+ <body>
+  observer_pattern_dynamic
+
+- 대상은 등록된 관찰자를 호출<br>
+- 동적할당 없이 관찰자를 등록 해제<br>
+- 한 대상은 한개의 관찰자만 확인 할 수 있음<br>
+- C++에서는 event가 있어서 메서드를 참조하는 delegate로 관찰자를 등록<br>
+- 자바스크립트는 EventListener프로토콜을 지원하는 객체 자체가 관찰자<br>
+
+  <script>
+		/* customMethod */
+		Array.prototype.findDelete = function(target){
+
+			for (let item in this){
+				if(this[item] === target){
+					this.splice(item,1);
+				}
+			}
+			return this;
+
+		};
+	</script>
+	<script>
+
+
+		class Observer{
+			constructor(){
+				this.head_ = null;
+				this.next_ = null;
+			}
+			
+			onNotify(entity, event){
+				
+			}
+		}
+
+		class Unit{
+			constructor(){
+				this.isHero = true;
+
+			}
+		}
+
+
+
+		const EVENT_ENTITY_FELL = 'achieve';
+		const EVENT_ENTITY_RUN = 'run';
+
+
+		class Achievements extends Observer{
+			constructor(){
+				super();
+			}
+			onNotify(entity, event){
+				switch(event){
+					case EVENT_ENTITY_FELL:
+						if(entity.isHero){
+							console.log('히어로야');
+						}
+						break;
+				}
+			}
+		}
+
+		class Run extends Observer{
+			constructor(){
+				super();
+			}
+			onNotify(entity, event){
+				switch(event){
+					case EVENT_ENTITY_RUN:
+						if(entity.isRun){
+							console.log('뛸수있네');
+						}else{
+							console.log('뛸수없어');
+						}
+						break;
+				}
+			}
+		}
+
+		class Subject{
+			constructor(){
+				this.head_ = null;
+			}
+
+			addObserver(observer){
+
+				observer.next_ = this.head_;
+				this.head_ = observer;
+			}
+
+			removeObserver(observer){
+				if(this.head_ == observer){
+					this.head_ = observer.next_;
+					observer.next_ = null;
+					return;
+				}
+
+				var current = this.head_;
+				while(current != null){
+					if(current.next_ == observer){
+						current.next_ = observer.next_;
+						observer.next_ = null;
+						return ;
+					}
+					current = current.next_;
+				}
+
+			}
+
+			notify(entity, event){
+				var observer = this.head_;
+
+				while (observer != null){
+					observer.onNotify(entity, event);
+					observer = observer.next_;
+				}
+			}
+		}
+
+		class Physics extends Subject{
+			constructor(){
+				super()
+			}
+			updateEntity_achieve_run(entity){
+				['achieve', 'run'].forEach( (item)=> this.notify(entity, item));
+			}
+		}
+
+
+
+
+
+		var achieve = new Achievements();
+		var run = new Run();
+
+		var unit = new Unit;
+			unit.isRun = true;
+		/*console.log(new Observer);*/
+
+		var subject = new Subject;
+		subject.addObserver(achieve);
+		subject.addObserver(run);
+
+			/*subject.removeObserver(achieve);*/
+
+
+			/*subject.notify(unit, 'achieve');
+			subject.notify(unit, 'run');*/
+
+		subject.notify(unit,'achieve');
+
+
+	</script>
+ </body>
+</html>

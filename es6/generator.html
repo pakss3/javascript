@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>generator</title>
+</head>
+<body>
+<div id="display" style="width:100px;height:100px">100</div>
+    <script>
+        function* gen(){
+            console.log('start');
+            yield 1;
+            console.log('end');
+        }
+
+        const g = gen();
+        console.log(g.next());
+        console.log(g.next());
+
+        /*
+
+        Roles
+         Iterable 이란? Symbol.iterator 속성
+         interface Iterable {
+         [Symbol.iterator]() : Iterator;
+         }
+        //기본적으로 next라는 지시자가 존재하며 아래 iteratorResult 형태로 결과 값을 표한 할 것임,
+         interface Iterator {
+         next() : IteratorResult;
+         }
+         //현재 값과 종료 상태를 파악할수 있는 done이 존재
+         interface IteratorResult {
+         value : any;
+         done : boolean;
+         }
+
+        *
+        *
+        * */
+
+
+        function* gen(){
+
+            yield 1 /* (1)의 출력범위는 여기까지 */;
+
+            yield 2 /* (2)의 출력범위는 여기까지 */;
+
+            yield 3 /* (3)의 출력범위는 여기까지 */;
+            /* (4)의 출력범위는 여기까지 */
+        }
+
+        const g2 = gen();
+/* (1) */ console.log(g2.next()); //Object {value: 1, done: false}
+/* (2) */ console.log(g2.next()); //Object {value: 2, done: false}
+/* (3) */ console.log(g2.next()); //Object {value: 3, done: false}
+/* (4) */ console.log(g2.next()); //Object {value: undefined, done: true}
+
+    function* naturalNumbers(){
+        var n = 1;
+        while(true){
+            yield n++;
+        }
+    }
+    const nN = naturalNumbers();        //infinite;
+        console.log(nN.next());
+        console.log(nN.next());
+        console.log(nN.next());
+        console.log(nN.next());
+        console.log(nN.next());
+        console.log(nN.next());
+        console.log(nN.next());
+
+
+        function* foo(){
+            yield 'a';
+            yield 'b';
+        }
+
+        function* bar(){
+            yield 'x';
+            yield*  foo();
+            yield 'y';
+        }
+
+        const b =bar();
+        console.log(b.next());
+        console.log(b.next());
+        console.log(b.next());
+        console.log(b.next());
+        console.log(b.next());
+
+        class BinaryTree{
+            constructor(value, left = null, right = null){
+                this.value = value;
+                this.left = left;
+                this.right = right;
+            }
+
+            * [Symbol.iterator]() {
+                yield this.value;
+                if (this.left) {
+                    yield* this.left;
+                }
+                if (this.right) {
+                    yield* this.right;
+                }
+            }
+        }
+
+        const tree = new BinaryTree(1,
+                new BinaryTree(2,
+                        new BinaryTree(4),
+                        new BinaryTree(5)
+                ),
+                new BinaryTree(3,
+                        new BinaryTree(6),
+                        new BinaryTree(7)
+                )
+        );
+        function* preorder(element){
+            yield element;
+            for(const e of Array.from(element.children))
+                yield* preorder(e)
+        }
+       const  pr = preorder(tree);
+console.log(pr.next());
+
+        arr = [1,2,3,4,5,6,7,8,9,10];
+        Array.prototype.take = function(n){
+            var res = [];
+            for(var i = 0; i < this.length && i < n; i++){
+                console.log('take:'+this[i]);
+                res.push(this[i])
+            }
+            return res;
+        }
+        arr.filter(function(v){console.log('filter:'+v);return v%2}).take(3);
+
+
+        function* gen() {
+            // (A)
+            while (true) {
+                try {
+                    const input = yield; // (B)
+                    console.log(input);
+                }catch(e){console.log(e)}
+            }
+        }
+
+        const g3 = gen();
+        g3.next(1);
+        g3.next(2);
+        g3.next(3);
+        g3.throw(new Error());
+        g3.return(0);
+
+        function coroutine(gen){
+            return function(...args){
+                const genObj = gen(...args);
+                genObj.next();
+                return genObj;
+            }
+        }
+
+        const print = coroutine(function* (){
+            const el = document.getElementById('display');
+            while(true){
+
+                const [data, attr] = yield;
+                el.style.fontSize = attr.fontSize||'medium';
+                el.style.color = attr.color||'#000000';
+                el.innerHTML = data;
+            }
+        });
+
+        const bigFont = coroutine(function* (target){
+            while(true){
+                const [data, attr] = yield;
+                if(data >= 10){
+                    attr.fontSize = 'xx-large';
+                }
+                target.next([data, attr]);
+            }
+        });
+        const colorFont = coroutine(function* (target){
+            while(true){
+                const [data,attr] = yield;
+                if(data%2){
+                    attr.color='#FF0000';
+                }
+                target.next([data,attr]);
+            }
+        });
+
+        const makeAttr = coroutine(function* (target){
+            console.log(3);
+            while(true){
+                target.next([yield, {}]);
+            }
+        });
+        const incNumber = coroutine(function* (target){
+            while(true){
+                console.log(2);
+                target.next((yield)+1);
+            }
+        });
+        const extractNumber = coroutine(function* (target){
+            const el = document.getElementById('display');
+            while(true){
+                console.log(1);
+                yield;
+                target.next(Number(el.innerHTML||0));
+            }
+        });
+
+        const o = extractNumber(incNumber(makeAttr(colorFont(bigFont(print())))));
+        o.next();
+        o.next();
+        o.next();
+        o.next();
+        o.next();
+        o.next();
+ //
+console.log("*******************************************************");
+        const it1 = foo();
+        const it2 = foo();
+        let val1 = it1.next().value;
+        let val2 = it2.next().value;
+        var z = 1;
+        console.log(val1,val2)
+          val1 = it1.next(val2 * 10).value; //z = 2
+
+              val2 = it2.next(val1 * 5).value;  //z = 3 , 3* 40, 5
+        console.log(val1,val2)
+        console.log(it1.next(val2/2));
+        it2.next(val1/4);
+
+        function* foo(){
+
+            const x = yield 2;
+
+            z++;
+            console.log(z)
+            const y = yield (x * z);
+
+            console.log(x,y,z);
+        }
+    </script>
+</body>
+</html>

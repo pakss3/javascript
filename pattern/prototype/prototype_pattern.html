@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>prototype pattern</title>
+ </head>
+ <body>
+
+ - 클래스 뿐만 아니라 상태도 같이 복사함<br>
+ - 객체의 복사가 주가 됨<br>
+ - 프로토타입 기반 언어-> 자바스크립트(but 자바스크립트에서는 복제를 찾아볼수 없음)<br>
+ - 자바스크립트에서 자료형의 정의는 생성자 함수에서 상태는 인스턴스에 저장<br>
+ <br>
+ {<br>
+  "이름" :"고블린 보병"<br>
+ ,"기본체력" : 20,<br>
+ ,"최대체력" : 30<br>
+ , "내성" : ["추위","독"]<br>
+ }<br>
+ <br>
+ {<br>
+  "이름" : "고블린 마법사"<br>
+ ,"프로토타입" : "고블린 보병"<br>
+ ,"마법" : ["화염구","번개 화살"]<br>
+ }<br>
+ - 기본 고블린이라는 추상 프로토타입을 따로 만들지 않아도 됨<br>
+ - 고블린 자료형을 하나 골라서 다른 객체를 위임<br>
+   <script>
+     class Monster{
+      constructor(){
+
+      }
+      clone(){
+       return 0;
+      }
+     }
+
+    class Ghost extends  Monster{
+      constructor(health, speed){
+       super();
+
+        this.health = health;
+        this.speed = speed;
+      }
+
+     clone(){
+      return new Ghost(this.health, this.speed);
+
+     }
+    }
+
+     class Spawner{
+      constructor(_proto){
+       this.prototype_ = _proto.clone();
+      }
+
+     }
+
+     var ghost1 = new Ghost(100,200)
+     var spawner = new Spawner(ghost1);
+    console.log(spawner.prototype_);
+
+   </script>
+ </body>
+</html>

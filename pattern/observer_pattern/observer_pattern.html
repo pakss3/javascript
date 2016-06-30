@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+ </head>
+ <body>
+ - 특정인터페이스에 구현한 인스턴스 포인터 목록을 관리하는 클래스만 존재하면 간단하게 구현 가능<br>
+ - 인터페이스를 통해 "동기적"으로 메서드를 간접 호출함<br>
+ - 동기적으로 작동 한다는것은 모든 관찰자가 알림메서드를 반환하기 전에 다음 작업을 진행 할 수 없다는 점
+ - 자신에게 등록된 observer 포인터 목록을 들고 있음
+ 	<script>
+		/* customMethod */
+		Array.prototype.findDelete = function(target){
+
+			for (let item in this){
+				if(this[item] === target){
+					this.splice(item,1);
+				}
+			}
+			return this;
+
+		};
+	</script>
+	<script>
+
+
+		class Observer{
+			constructor(){
+				
+			}
+			
+			onNotify(entity, event){
+				
+			}
+		}
+
+
+		class Subject{
+			constructor(){
+				this.observers = [];
+				this.numObservers_= 0;
+
+			}
+
+			addObserver(observer){
+				this.observers.push(observer);
+			}
+
+			removeObserver(observer){
+				this.observers.findDelete(observer);
+			}
+
+			notify(entity, event){
+
+				for(let item of this.observers ){
+					item.onNotify(entity, event);
+				}
+			}
+		}
+
+		class Physics extends Subject{
+			constructor(){
+				super()
+			}
+			updateEntity_achieve_run(entity){
+				['achieve', 'run'].forEach( (item)=> this.notify(entity, item));
+			}
+		}
+
+		class Unit{
+			constructor(){
+				this.isHero = true;
+
+			}
+		}
+
+
+
+		const EVENT_ENTITY_FELL = 'achieve';
+		const EVENT_ENTITY_RUN = 'run';
+
+
+		class Achievements extends Observer{
+			onNotify(entity, event){
+				switch(event){
+					case EVENT_ENTITY_FELL:
+						if(entity.isHero){
+							console.log('히어로야');
+						}
+						break;
+				}
+			}
+		}
+
+		class Run extends Observer{
+			onNotify(entity, event){
+				switch(event){
+					case EVENT_ENTITY_RUN:
+						if(entity.isRun){
+							console.log('뛸수있네');
+						}else{
+							console.log('뛸수없어');
+						}
+						break;
+				}
+			}
+		}
+
+
+
+
+		var achieve = new Achievements();
+		var run = new Run();
+
+		var unit = new Unit;
+			unit.isRun = true;
+		/*console.log(new Observer);*/
+
+		var physics = new Physics;
+			physics.addObserver(achieve);
+			physics.addObserver(run);
+
+			/*subject.removeObserver(achieve);*/
+
+
+			/*subject.notify(unit, 'achieve');
+			subject.notify(unit, 'run');*/
+
+		physics.updateEntity_achieve_run(unit);
+
+
+	</script>
+ </body>
+</html>
