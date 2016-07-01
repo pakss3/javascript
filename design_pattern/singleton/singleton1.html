@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>singleton1</title>
+</head>
+<body>
+- 어디서도 쓸수 있는 전역변수와 같은 역할, 전역변수는 나쁘다.(유지보수 어려움, 생산성의 한계)
+- 전역변수는 커플링을 조장
+- 결국 클래스로 캡슐화된 전역상태
+
+<script>
+    class Bullet{
+        constructor(x,y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    class BulletManager{
+        create(x,y){
+            let bullet = new Bullet(x,y);
+            return bullet;
+        }
+
+        move(y){
+
+        }
+    }
+    // 위는 singleton을 쓸데없이 사용
+
+    class Bullet{
+        constructor(x,y){
+            this.x = x;
+            this.y = y;
+        }
+        move(y){
+
+        }
+    }
+
+    //위처럼 oop란 객체가 상태를 갖고 스스로 행동 할수 있도록 해주면 됨
+
+</script>
+</body>
+</html>

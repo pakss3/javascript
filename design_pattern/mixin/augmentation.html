@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>argmentation</title>
+</head>
+<body>
+    - 개발자들은 문제가 아닌것 들에 대해 아주 복잡한 해답을 만드는 것을 좋아한다 [토마스후치스]<br>
+    <br>
+    - 기존 상속 구현은 복잡하고 실현되기 힘든 부분이 있다.<br>
+    (슈퍼클래스는 확장이 되기 전에 선언이 되어야함, 정말 이렇게 할 수 있어? 서로가 서로를 상속하면? 등등..)<br>
+    - 보통 프로토타입을 선택할때 보통분류를 하려고 선택하는 것이 아니라 똑같이 사용하고자 선택한다<br>
+    - 믹스인은 상속연결이 가능한 다른 방법을 제공, 상속관계와 상관없이 속성을 불러올 수 있다.<br>
+    - 보통확장은 믹스인 함수를 받는 오브젝트에 복사한다(복제가아님)<br />
+    - 다른 버전은 믹스인 프로토타입 오브젝트만 복사하기를 원한다.<br />
+
+    - Function.prototyp.call의 방법으로 생성자 함수(RoundButton )에 withCircle, withClickable 속성을 prototype에 주입 할 수 있다.
+    - RoundButton이 mixin object, 나머지들이 기능 주입
+<script>
+    function extend(destination, source){
+        for (var key in source){
+            if(source.hasOwnProperty(key)){
+                destination[key] = source[key];
+            }
+        }
+        return destination;
+    }
+
+    Object.create({
+        area : function(){
+            return Math.PI * this.radius * this.radius;
+        },
+        grow : function(){
+            this.radius++;
+        },
+        shrink : function(){
+            this.radius--;
+        }
+    }, {
+        radius : {
+            writable : true, configurable : true, value:7
+        }
+    });
+
+    // 전통적인 프로토타입 확장형태
+    var Circle = function(){};
+    Circle.prototype ={
+        area : function(){
+            return Math.PI * this.radius * this.radius;
+        },
+        grow : function(){
+            this.radius++;
+        },
+        shrink : function(){
+            this.radius--;
+        }
+    };
+
+    var circleFns = {
+        area : function(){
+            return Math.PI * this.radius * this.radius;
+        },
+        grow : function(){
+            this.radius++;
+        },
+        shrink : function(){
+            this.radius--;
+        }
+    };
+
+    var clickableFns = {
+        hover : function(){ console.log('hovering'); }
+        ,press : function(){ console.log('button pressed');}
+        ,release:function(){ console.log('button released'); }
+        ,fire: function(){ console.log(this.action()); }
+    };
+
+    var RoundButton = function(radius, label, action){
+        this.radius = radius;
+        this.label = label;
+        this.action = action;
+
+    }
+   /* extend(RoundButton.prototype, circleFns);
+    extend(RoundButton.prototype, clickableFns);
+*/
+    /*var roundButton = new RoundButton(3, 'send', function(){ return 'you said yes'; });*/
+   /*     roundButton.grow();
+        roundButton.fire();*/
+
+    var withCircle = function(){
+        this.area = function(){ return Math.PI * this.radius * this.radius; };
+        this.grow = function(){ this.radius++; };
+        this.shrink = function(){ this.radius--; };
+    };
+    var withClickable = function(options){
+        this.hover = function(){ console.log('hovering'); };
+        this.opt = function(){ console.log('opt:'+options.str); };
+        this.fire = function(){ this.action(); };
+    };
+
+    // Function.prototyp.call의 방법으로 생성자 함수(RoundButton )에 withCircle, withClickable 속성을 prototype에 주입 할 수 있다.
+    withCircle.call(RoundButton.prototype);
+    withClickable.call(RoundButton.prototype,{str:'dddaa'});
+
+    var button1 = new RoundButton(3, 'send', function(){ return 'you said yes'; })
+    button1.opt();
+    console.dir(button1);
+
+    //Functional mixin 성능부하x, 프로토타입을 적용할때 생성자들을 정의하는동안 한번만 필요, 모든 동작은 공유된 프로토타입에 미리 할당
+
+</script>
+
+</body>
+</html>

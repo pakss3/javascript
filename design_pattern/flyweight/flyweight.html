@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>flyweight </title>
+</head>
+<body>
+경량패턴??<br>
+어떤 객체의 수가 너무 많아 좀 가볍게 만들고 싶을때 사용<br>
+고유상태와 외부상태로 나눔<br>
+<br>
+예제 : 지형 만들기<br>
+타일(고유상태)과 각 타일들이 갖고 있는 정보(외부상태)<br>
+<script>
+    function Terrain(movementCost, isWater, texture){
+
+        var movementCost_;
+        var isWater_;
+        var texture_;
+
+        function _Terrain(){
+            this.movementCost_ = movementCost;
+            this.isWater_ = isWater;
+            this.texture_ = texture;
+
+        }
+
+        _Terrain.prototype.getMovementCost = function(){
+            return this.movementCost_;
+        };
+        _Terrain.prototype.isWater = function(){
+            return this.isWater_;
+        };
+        _Terrain.prototype.getTexture = function(){
+            return this.texture_;
+        };
+
+
+        if(!(this instanceof _Terrain )){
+            return new _Terrain();
+        }
+
+    }
+
+    var CONST_GLASS_TEXTURE = "GLASS_TEXTURE";
+    var CONST_HILL_TEXTURE = "HILL_TEXTURE";
+    var CONST_RIVER_TEXTURE = "RIVER_TEXTURE";
+    var CONST_WIDTH = 10;
+    var CONST_HEIGHT = 12;
+
+    function World(){
+
+        var tiles = {};
+
+
+        function _World(){
+            this.glassTerrain_ = [1,false,CONST_GLASS_TEXTURE];
+            this.hillTerrain_ = [2,false,CONST_HILL_TEXTURE];
+            this.riverTerrain_ = [3,true,CONST_RIVER_TEXTURE];
+            this.tiles = tiles;
+
+        }
+
+        _World.prototype.setTile = function(x,y, value){
+            this.tiles = this.tiles||{};
+
+            this.tiles[x] = this.tiles[x]||{};
+            this.tiles[x][y] = this.tiles[x][y]||"";
+            this.tiles[x][y] = value;
+
+        };
+
+        _World.prototype.getTile = function(x,y){
+
+            return Terrain.apply(this, this.tiles[x][y]);
+        };
+
+
+        _World.prototype.generateTerrain = function(){
+            for(var x=0; x < CONST_WIDTH; x++) {
+                for(var y=0; y < CONST_HEIGHT; y++){
+                    if(x % 2 == 0){
+                        this.setTile.apply(this, [x,y,this.glassTerrain_]);
+                    }else{
+                        this.setTile.apply(this, [x,y,this.hillTerrain_]);
+                    }
+                    if(y % 3 == 1){
+                        this.setTile.apply(this, [x,y,this.riverTerrain_]);
+                    }
+                }
+            }
+        };
+
+        if(!(this instanceof _World )){
+            return new _World();
+        }
+
+    }
+
+
+
+    function Main(){
+        var world = World();
+        world.generateTerrain();
+        console.dir(world.getTile(1,1).getMovementCost());
+
+    }
+
+    window.onload = function(){
+        Main();
+    }
+</script>
+</body>
+</html>

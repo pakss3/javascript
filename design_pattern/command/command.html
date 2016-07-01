@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>command pattern</title>
+    <style>
+        #unit {
+            position: absolute;
+            background-color: olivedrab;
+            top:100px;
+            left:100px;
+            display:block
+        }
+    </style>
+</head>
+<body>
+메서드의 호출을 실체화 함
+<div id="unit">
+    unit
+</div>
+<script>
+
+    function getStyle(el, styleProp) {
+        var value, defaultView = (el.ownerDocument || document).defaultView;
+        // W3C standard way:
+        if (defaultView && defaultView.getComputedStyle) {
+            // sanitize property name to css notation
+            // (hypen separated words eg. font-Size)
+            styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+            return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+        } else if (el.currentStyle) { // IE
+            // sanitize property name to camelCase
+            styleProp = styleProp.replace(/\-(\w)/g, function(str, letter) {
+                return letter.toUpperCase();
+            });
+            value = el.currentStyle[styleProp];
+            // convert other units to pixels on IE
+            if (/^\d+(em|pt|%|ex)?$/i.test(value)) {
+                return (function(value) {
+                    var oldLeft = el.style.left, oldRsLeft = el.runtimeStyle.left;
+                    el.runtimeStyle.left = el.currentStyle.left;
+                    el.style.left = value || 0;
+                    value = el.style.pixelLeft + "px";
+                    el.style.left = oldLeft;
+                    el.runtimeStyle.left = oldRsLeft;
+                    return value;
+                })(value);
+            }
+            return value;
+        }
+    }
+    document.addEventListener("keydown", handleInput, false);
+    function handleInput(e){
+        var keyCode = e.keyCode;
+
+        var pressDispatcher = {       //command dispatcher
+            37 : new LeftCommand,
+            38 : new UpCommand,
+            39 : new RightCommand,
+            40 : new DownCommand,
+            89 : new RedoCommand,
+            90 : new UndoCommand
+        };
+
+        var button = pressDispatcher[keyCode];
+        var isPress = (keyCode in pressDispatcher);
+        if(isPress) button.execute();
+
+
+    };
+
+    var Command = function(){
+        var x = unit().x, y = unit().y;
+        return {
+                "execute" : function(){
+
+                    console.log("origin command execute");
+                },
+                "undo" : function(){
+                    if(this.beforeLocation.length > 0){
+                        var locationData = this.beforeLocation.pop();
+                            unit().move(locationData);
+                            this.redoHistoryWrite(locationData);
+                    }
+                },
+
+                "redo" : function(){
+                    if(this.afterLocation.length > 0){
+                        var locationData = this.afterLocation.pop();
+                        unit().move(locationData);
+                        this.undoHistoryWrite(locationData);
+                    }
+                },
+                'beforeLocation' : [],
+                "undoHistoryWrite" : function(){
+
+                    this.beforeLocation.push([unit().x,unit().y]);
+                },
+
+                'afterLocation' : [],
+                "redoHistoryWrite" : function(){
+
+                    this.afterLocation.push([unit().x,unit().y]);
+                }
+            };
+    }();
+
+
+    function RedoCommand(){
+
+        function _RedoCommand(){
+            this.execute = function(){
+                this.redo();
+            };
+
+        }
+        //@extends
+        _RedoCommand.prototype = Command;
+
+        if(!(this instanceof _RedoCommand )){
+            return new _RedoCommand();
+        }
+    }
+
+
+    function UndoCommand(){
+
+        function _UndoCommand(){
+            this.execute = function(){
+                this.undo();
+            };
+
+        }
+        //@extends
+        _UndoCommand.prototype = Command;
+
+        if(!(this instanceof _UndoCommand )){
+            return new _UndoCommand();
+        }
+    }
+
+    function UpCommand(){
+
+        function _UpCommand(){
+
+            this.execute = function(){
+                this.undoHistoryWrite();
+                up();
+            };
+
+        }
+        //@extends
+        _UpCommand.prototype = Command;
+
+        if(!(this instanceof _UpCommand )){
+            return new _UpCommand();
+        }
+    }
+
+
+    function DownCommand(){
+
+        function _DownCommand(){
+            this.execute = function(){
+                this.undoHistoryWrite();
+                down();
+            }
+        }
+        //@extends
+        _DownCommand.prototype = Command;
+
+        if(!(this instanceof _DownCommand )){
+            return new _DownCommand();
+        }
+    }
+
+
+    function LeftCommand(){
+
+        function _LeftCommand(){
+            this.execute = function(){
+                this.undoHistoryWrite();
+                left();
+            }
+        }
+        //@extends
+        _LeftCommand.prototype = Command;
+
+        if(!(this instanceof _LeftCommand )){
+            return new _LeftCommand();
+        }
+    }
+
+
+    function RightCommand(){
+
+        function _RightCommand(){
+            this.execute = function(){
+                this.undoHistoryWrite();
+                right();
+            }
+        }
+        //@extends
+        _RightCommand.prototype = Command;
+
+        if(!(this instanceof _RightCommand )){
+            return new _RightCommand();
+        }
+    }
+
+
+    function unit(){
+        var target = document.getElementById('unit');
+
+        return {
+            "x" : parseInt(getStyle(target,"left"),10),
+            "y" : parseInt(getStyle(target,"top"),10),
+            "body" : target.style,
+            "move" : function(arr){
+                target.style.left = arr[0]+"px";
+                target.style.top = arr[1]+"px";
+
+            }
+        };
+    }
+window.onload= function(){
+    /*console.log(unit().x);*/
+};
+
+
+</script>
+
+<script>
+
+
+
+function up(){
+    var target = unit().y;
+    return unit().body.top = suffixValue(target, -3);
+}
+
+function down(){
+    var target = unit().y;
+    return unit().body.top = suffixValue(target, +3);
+}
+
+function left(){
+    var target = unit().x;
+    return unit().body.left = suffixValue(target, -3);
+}
+
+function right(){
+    var target = unit().x;
+    return unit().body.left = suffixValue(target, +3);
+}
+
+function suffixValue(target, value){
+    var suffix = "px";
+    return (target + value)+suffix;
+}
+
+</script>
+</body>
+</html>

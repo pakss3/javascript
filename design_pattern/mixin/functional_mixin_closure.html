@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>functional mixin closure</title>
+</head>
+<body>
+    functional mixin은 더 최적화가 가능, 클로저를 이용하여 초기 정의를 캐싱함
+    - 클로저를 이용하면 캐싱이 더 잘된다는 가정이 있다.
+    - 가능하면 결대로 잘라라. 결은 어떤 방향으로 나무가 잘라지기 원하는지 알려준다. <br>
+    결을 가로질러 자르면 스스로 더 많은 일을 만들고 자르는 일을 망치게 될것이다.<br>
+    > 자바스크립트에 클래스 형태의 객체지향이 과연 어울리는지 고민해보자. 믹스인은 그에 대응하는 최고의 패턴이 될 수 있다.
+<script>
+    var withRectangle = (function(){
+        function area(){
+            return this.length * this.width;
+        }
+        function grow(){
+            this.length++, this.width++;
+        }
+        function shrink(){
+            this.length--, this.width--;
+        }
+
+        return function(){
+            this.area = area;
+            this.grow = grow;
+            this.shrink = shrink;
+            return this;
+        }
+    })();
+
+    var RectangularButton = function(length, width, label, action){
+        this.length = length;
+        this.width = width;
+        this.label = label;
+        this.action = action;
+    }
+
+    withRectangle.call(RectangularButton.prototype);
+    var button3 = new RectangularButton(4,2,'delete',function(){ return 'deleted'});
+    button3.area();
+    button3.grow();
+    console.log(button3.area());
+    console.dir(button3);
+
+</script>
+</body>
+</html>

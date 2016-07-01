@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>command pattern</title>
+    <style>
+        #unit {
+            position: absolute;
+            background-color: olivedrab;
+            top:100px;
+            left:100px;
+            display:block
+        }
+    </style>
+</head>
+<body>
+메서드의 호출을 실체화 함
+<div id="unit">
+    unit
+</div>
+<script>
+    document.addEventListener("keydown", handleInput, false);
+    function handleInput(e){
+        var keyCode = e.keyCode;
+        if(keyCode == 38){
+            up();
+        }else if(keyCode == 40){
+            down();
+        }else if(keyCode == 37){
+            left();
+        }else if(keyCode == 39){
+            right();
+        }
+    };
+
+
+    function unit(){
+        var target = document.getElementById('unit');
+
+        return {
+            "x" : parseInt(getStyle(target,"left"),10),
+            "y" : parseInt(getStyle(target,"top"),10),
+            "body" : target.style
+        };
+    }
+window.onload= function(){
+    console.log(unit().x);
+};
+
+
+</script>
+
+<script>
+
+
+    function getStyle(el, styleProp) {
+        var value, defaultView = (el.ownerDocument || document).defaultView;
+        // W3C standard way:
+        if (defaultView && defaultView.getComputedStyle) {
+            // sanitize property name to css notation
+            // (hypen separated words eg. font-Size)
+            styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+            return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+        } else if (el.currentStyle) { // IE
+            // sanitize property name to camelCase
+            styleProp = styleProp.replace(/\-(\w)/g, function(str, letter) {
+                return letter.toUpperCase();
+            });
+            value = el.currentStyle[styleProp];
+            // convert other units to pixels on IE
+            if (/^\d+(em|pt|%|ex)?$/i.test(value)) {
+                return (function(value) {
+                    var oldLeft = el.style.left, oldRsLeft = el.runtimeStyle.left;
+                    el.runtimeStyle.left = el.currentStyle.left;
+                    el.style.left = value || 0;
+                    value = el.style.pixelLeft + "px";
+                    el.style.left = oldLeft;
+                    el.runtimeStyle.left = oldRsLeft;
+                    return value;
+                })(value);
+            }
+            return value;
+        }
+    }
+
+function up(){
+    var target = unit().y;
+    return unit().body.top = suffixValue(target, -3);
+}
+
+    function down(){
+        var target = unit().y;
+        return unit().body.top = suffixValue(target, +3);
+    }
+
+    function left(){
+        var target = unit().x;
+        return unit().body.left = suffixValue(target, -3);
+    }
+
+    function right(){
+        var target = unit().x;
+        return unit().body.left = suffixValue(target, +3);
+    }
+
+function suffixValue(target, value){
+    var suffix = "px";
+    return (target + value)+suffix;
+}
+
+</script>
+</body>
+</html>

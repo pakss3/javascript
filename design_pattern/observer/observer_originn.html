@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>observer</title>
+</head>
+<body>
+누가 받는지 상관없게 알림을 보냄<br />
+구독자 측에서 스스로 등록하고 관리함
+
+<script>
+    class Observer{
+        constructor(){
+
+        }
+
+        onNotify(entity, event){
+
+        }
+    }
+
+
+    class Achievements extends Observer{
+        onNotify(entity, event){
+            switch(event){
+                case EVENT_ENTITY_FELL:
+                    if(entity.isHero() && heroIsOnBridge){
+                        unlock(ACHIEVEMENT_FELL_OFF_BRIDGE);
+                    }
+                    break;
+            }
+        }
+
+        unlock(achievement){
+
+        }
+    }
+
+    class Subject{
+        constructor(){
+            this.observers = [];
+        }
+
+        addObserver(observer){
+            this.observers.push(observer);
+        }
+        removeObserver(observer){
+            this.observers.find((item)=> item === observer).pop();
+
+        }
+        notify(entity, event){
+            Array.from(this.observers, arr => arr.onNotify())
+        }
+    }
+
+
+    function Main(){
+        console.dir(new Observer());
+    }
+    window.onload = function(){
+        Main();
+    }
+</script>
+</body>
+</html>
