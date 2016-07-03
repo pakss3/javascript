@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        let username = "j";
+        let arr = ["a","b","c"];
+
+        if(arr.indexOf(username) === -1){
+            arr.push(username);
+        }
+
+        ~arr.indexOf(username) || arr.push(username);
+        // ~는 bit연산자 not 사용 -1을 0으로 변경
+
+
+        function getOffset(x,y,w,h,placement){
+            var offset
+            switch(placement){
+                case 'bottom' : offset = {
+                    top : y+h,
+                    left: x+w / 2
+                }
+                    break;
+                case 'top' : offset = {
+                    top : y,
+                    left : x+w/2
+                }
+            }
+
+        }
+
+        function getOffset(x,y,w,h,placement){
+            return 'top' == placement : { top:y+h , left : x+w/2} :
+                    'bottom' == placement : {top:y+h, left: x+w/2} :
+                                            {};
+        }
+
+    </script>
+</body>
+</html>

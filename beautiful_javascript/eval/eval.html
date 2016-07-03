@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eval</title>
+</head>
+<body>
+- eval은 문자열을 받아서 코드를 실행함
+- eval도 지역평가와 전역 평가가 있다.
+> 지역평가 시 해당 부분에서 범위를 넘어서 접근하는 변수는 현저히 느려짐
+> 전역으로 생성된 함수의 성능은 영향을 거의 받지 않음
+
+
+<script>
+    function local_test(){
+
+        eval('local = 2; alert(local);');
+    }
+
+    local_test();
+    function global_test(){
+        (0||eval)('global = 3; alert(global++);');  //전역 실행
+        var lave = eval;
+        lave('global_case2 = 5');
+    }
+
+    global_test();
+    alert(global);
+    alert(global_case2);
+</script>
+
+</body>
+</html>

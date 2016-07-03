@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    class Actor{
+        constructor(){
+
+        }
+
+        reset(){
+            this.slapped_ = false;
+
+        }
+        slap(){
+            this.slapped_ = true;
+        }
+
+        wasSlapped(){
+            return this.slapped_;
+        }
+    }
+
+    class Stage{
+        constructor(){
+            this.NUM_ACTORS = 3;
+            this.actors_ = new Array(this.NUM_ACTORS);
+        }
+
+        add(actor, index){
+            this.actors_[index] = actor;
+        }
+
+        update(){
+            for(let i =0; i< this.NUM_ACTORS; i++){
+                this.actors_[i].update();
+                this.actors_[i].reset();
+            }
+        }
+    }
+    class Comedian extends Actor{
+        constructor(){
+            super();
+
+            this.actor = new Actor;
+        }
+        face(){
+            this.facing_ = this.actor;
+        }
+        update(){
+            if(this.wasSlapped()){
+                this.facing_.slap();
+            }
+        }
+    }
+
+    var harry = new Comedian();
+    var baldy = new Comedian();
+    var chump = new Comedian();
+
+    harry.face(baldy);
+    baldy.face(chump);
+    chump.face(harry);
+
+    var stage = new Stage;
+    stage.add(harry, 0);
+    stage.add(baldy, 1);
+    stage.add(chump, 2);
+
+    harry.slap();
+    stage.update();
+
+    console.dir(stage);
+
+    stage.add(harry, 2);
+    stage.add(baldy, 1);
+    stage.add(chump, 0);
+    console.dir(stage);
+</script>
+</body>
+</html>

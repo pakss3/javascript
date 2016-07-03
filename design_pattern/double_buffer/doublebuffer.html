@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    - 프레임버퍼 : 메모리에 할당된 픽셀들의 배열로, 한 픽셀 색을 여러 바이트로 표현하는 RAM의 한부분.
+    - 프레임버퍼를 읽는 동안에 비디오드라이버가 화면에 출력하고 이를 못따라가면 테어링(tearing)이 발생
+    - 이중버퍼 : 정보를 읽을때는 항상 현재 버퍼에 접근, 정보를 쓸때는 다음버퍼에 접근
+    - 언제 쓸 것인가?
+        > 순차적으로 변경해야 하는 상태가 있다.
+        > 이 상태는 변경 도중에도 접근 가능해야한다.
+        > 바깥 코드에서는 작업중인 상태에 접근할 수 없어야 한다.
+        > 상태에 값을쓰는 도중에도 기다리지 않고 바로 접근 할 수 있어야 한다.
+
+<script>
+    const BLACK = "0";
+    const WHITE = "1";
+    class Framebuffer{
+        constructor(){
+            clear();
+        }
+
+        clear(){
+            for( var i; i < WIDTH * HEIGHT; i++){
+                this.pixels_[i] = WIDTH;
+            }
+        }
+
+        draw(x, y){
+            this.pixels_[WIDTH * y +x] = BLACK;
+        }
+        getPixels(){ return this.pixels_; }
+
+    }
+
+    class Scene{
+        constructor() {
+            this.buffer_ = new Framebuffer;
+        }
+
+        draw(){
+            this.buffer_.clear();
+            this.buffer_.draw(1,1); this.buffer_.draw(4,1);
+            // 이때 비디오 드라이버가 다 읽엇을 수도 있다.
+            this.buffer_.draw(1,3); this.buffer_.draw(2,4);
+            this.buffer_.draw(3,4); this.buffer_.draw(4,3);
+
+        }
+
+        getBuffer(){ return this.buffer_; }
+    }
+
+    class SceneDouble{
+        constructor() {
+            this.current_ = new Framebuffer;
+            this.next_ = new Framebuffer;
+
+        }
+
+        draw(){
+            this.next_.clear();
+            this.next_.draw(1,1); this.next_.draw(4,1);
+
+            this.next_.draw(1,3); this.next_.draw(2,4);
+            this.next_.draw(3,4); this.next_.draw(4,3);
+            swap();
+        }
+
+        getBuffer(){ return this.current_; }
+        swap(){
+            this.current_
+                    ^= this.next_
+                    ^= this.current_
+                    ^= this.next_;
+        }
+
+    }
+</script>
+
+
+</body>
+</html>
