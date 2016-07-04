@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>double_buffer</title>
+</head>
+<body>
+    - 컴퓨터 그래픽스 작동원리<br>
+        > 한번에 한 픽셀씩 좌에서 우로 그줄을 다 채우면 다음줄로 해서 그린다.<br>
+        > 너무 빠름(1초의 60번정도)<br>
+        > 프레임버퍼는 메모리에 할당된 픽셀들의 배열로 한 픽셀의 색을 여러 바이트로 표현한 RAM의 한 부분<br>
+    * 티어링<br>
+        1. 픽셀값을 프레임버퍼에 입력하는동안 비디오 드라이버도 읽기 시작함.<br>
+        2. 비디오 드라이버를 다 읽엇지만 픽셀값은 다 읽은 상태가 아님<br>
+    <br>
+    - 이중버퍼<br>
+        > 하나의 버퍼는 지금 출력되는 프레임, 렌더링 되는 동안 다른 하나의 프레임을 채운다.<br>
+    <br>
+    - when?<br>
+        > 순차적으로 변경하는 상태<br>
+        > 이상태는 변경도중에 접근 가능<br>
+        > 바깥코드에서는 작업중인 상태에 접근할 수 없어야한다.<br>
+        > 상태에 값을 쓰는 도중에도 기다리지 않고 바로 접근할 수 있어야 한다.<br>
+    <br>
+    <div style="width:16px; height:12px; word-break: normal">
+        00000000000000000000000000 000000000000000000000000
+    </div>
+    <script>
+        const WHITE = "0";
+        const BLACK = "1";
+        const WIDTH = 16;
+        const HEIGHT = 12;
+
+        class Canvas{
+            constructor() {
+                this.init();
+                this.clacWidth();
+                this.clacHeight();
+            }
+
+            draw(){
+                document.body.innerHTML += this.getCanvasTemplate();
+            }
+
+            getCanvasTemplate(){
+                return `<div id="${this.id}" style="width:${this.width}; height:${this.height}; display:inline-block"></div>`;
+            }
+
+            clacWidth(){
+                this.width = this.figure.width * WIDTH;
+            }
+
+            clacHeight(){
+                this.height = this.figure.height * HEIGHT;
+            }
+
+            init({
+                width = 0,
+                height = 0,
+                id = 'canvas'
+            } = {}){
+                this.width = width;
+                this.height = height;
+                this.id = id ;
+                this.figure = new BasicCharSizeFigure;
+            }
+        }
+
+        class BasicCharSizeFigure{
+            constructor(){
+                this.init();
+                this.execute();
+            }
+
+            init({
+                    defaultchar = "0",
+                    width = 0,
+                    height = 0,
+                    id = "dummy",
+                    template = `<span id="${id}" style="display:inline-block; ">${defaultchar}</span>`
+            } = {}) {
+                this.defaultchar = defaultchar;
+                this.id = id;
+                this.width = width;
+                this.height = height;
+                this.template = template;
+            }
+
+            measure(){
+                let figure =  document.getElementById(this.id);
+                let style = window.getComputedStyle(figure);
+
+                this.width = parseInt(style.width,10);
+                this.height = parseInt(style.height);
+            }
+
+            tempValueBind(){
+
+                document.body.innerHTML  += this.template;
+            }
+
+            tempValueDelete(){
+                delete document.getElementById(this.id);
+            }
+
+            execute(){
+                this.tempValueBind();
+                this.measure();
+                this.tempValueDelete();
+            }
+
+        }
+
+        let figure = new BasicCharSizeFigure();
+
+            console.log(figure);
+
+        let canvas = new Canvas;
+        canvas.draw();
+
+        class frameBuffer{
+            constructor(){
+                this.pixels = new Array(WIDTH * HEIGHT);
+                this.clear();
+            }
+
+            clear(){
+        for (let i = 0; i < WIDTH * HEIGHT; i++){
+            this.pixels[i] = WHITE;
+        }
+        }
+
+        draw(x, y){
+            this.pixels[(WIDTH * y) + x ] = BLACK;
+        }
+
+        getPixels(){
+            return this.pixels;
+        }
+
+        }
+
+        class Scene{
+            constructor(){
+                this.buffer_ = new frameBuffer;
+            }
+            draw(){
+                this.buffer_.clear();
+                this.buffer_.draw(1, 1); this.buffer_.draw(4, 1);
+                this.buffer_.draw(1, 3); this.buffer_.draw(2, 4);
+                this.buffer_.draw(3, 4); this.buffer_.draw(4, 3);
+            }
+
+            getBuffer(){
+                return this.buffer_ ;
+            }
+        }
+
+        let scene = new Scene;
+            scene.draw();
+        console.log(scene.getBuffer());
+
+
+    </script>
+</body>
+</html>
