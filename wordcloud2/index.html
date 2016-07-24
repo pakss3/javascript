@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+</head>
+<body>
+<form id="form" method="get" action="">
+
+        <div class="span12" id="canvas-container">
+            <canvas id="canvas" class="canvas"></canvas>
+            <div id="html-canvas" class="canvas hide"></div>
+        </div>
+    <input type="number" id="config-dppx" class="input-mini" min="1" value="1" required>
+
+    <input type="number" id="config-height" class="input-small" min="1">
+    <textarea id="input-list" placeholder="Put your list here." rows="2" cols="30" class="span12"></textarea>
+    <textarea id="config-option" placeholder="Put your literal option object here." rows="2" cols="30" class="span12"></textarea>
+
+    <input type="number" id="config-width" class="input-small" min="1">
+
+</form>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="./src/wordcloud2.js"></script>
+<script src="index.js"></script>
+<script>
+    WordCloud(document.getElementById('txt'));
+
+
+</script>
+</body>
+</html>

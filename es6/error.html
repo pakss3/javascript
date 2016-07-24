@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>error</title>
+</head>
+<body>
+<script>
+    new Error("모든 에러의 기본타입");
+    new EvalError('eval을 통해 코드가 실행될때 에러가 발생하면 던진다.');
+    new RangeError('숫자가 범위를 넘을때 던진다. ');
+    new ReferenceError('오브젝트가 예상되었지만 가능하지 않을때 던진다.');
+    new SyntaxError('eval에 넘겨진 코드가 문법 에러를 가질때 던진다.');
+    new TypeError('변수가 예상된 타입이 아닐때 던진다. 예를 들면 new 10이 참이나 prop일때 ');
+    new URIError('부정확한 형식을 가진 URI 문자열이 encodeURI, encodeURIComponent, decodeURI, DecodeURIComponent 넘겨졌을때 던짐');
+
+    //customError
+
+    function MyError(message){
+        this.message = message;
+    }
+
+    MyError.prototype = Object.create(Error.prototype);
+
+</script>
+</body>
+</html>
